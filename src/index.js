@@ -2,7 +2,7 @@ const Stream = require("most");
 const { T, cond, equals, path } = require("ramda");
 
 const { assemble } = require("arch-one");
-const { button, div, render } = require("arch-one/dom");
+const { Keyed, button, div, render } = require("arch-one/dom");
 
 const increment = {
     given: equals("intent/INCREMENT"),
@@ -29,7 +29,7 @@ const Program = {
     ],
     materialize: model => [
         [SimpleLabel, { label: "Custom label" }],
-        [button.keyed("some-key"), { onClick: handleIncrement },
+        [Keyed(button, "some-key"), { onClick: handleIncrement },
             `Clicked ${model.counter} times`,
         ],
     ],
@@ -44,4 +44,4 @@ const Program = {
     ]),
 };
 
-render(Program, document.body);
+render(assemble(Program), document.body);
