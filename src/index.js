@@ -1,5 +1,5 @@
 const Stream = require("most");
-const { T, cond, equals, path } = require("ramda");
+const { T, cond, equals, map, path, reduce } = require("ramda");
 
 const { assemble } = require("arch-one");
 const { Keyed, button, div, render } = require("arch-one/dom");
@@ -17,11 +17,14 @@ const SimpleLabel = plugins => ({ label = `Some label` }) => [
 ];
 
 const Main = plugins => ({
-    interpret: {
-        "intent/INCREMENT": emit => intent => Stream.from([
-            emit("fact/INCREMENTED"),
-        ]),
-    },
+    intents: [
+        {
+            type: "intent/INCREMENT",
+            handle: emit => intent => Stream.from([
+                emit("fact/INCREMENTED"),
+            ]),
+        },
+    ],
     //process: spawnFact => spawnIntent => fact => Stream.from([
     //]),
     replay: (model = { counter: 0 }) => cond([
@@ -33,15 +36,15 @@ const Main = plugins => ({
     ]),
 });
 
-const DomDriver = plugins => decoratee => {
+const DomDriver = ({ intl }) => {
     const KeyedButton = Keyed(button, "some-key");
-    decoratee.materialize = model => [
+    return model => [
         [SimpleLabel, { label: "Custom label" }],
         [KeyedButton, { onClick: handleIncrement },
-         `Clicked ${model.counter} times`,
+            intl.translate("main.clicked.label", model.counter),
+            //`Clicked ${model.counter} times`,
         ],
     ];
-    return decoratee;
 };
 
-render(assemble(Main, DomDriver), document.body);
+render({ intl: key => key }, [Main, DomDriver], document.body);
