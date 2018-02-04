@@ -4,13 +4,6 @@ const { T, cond, equals, path } = require("ramda");
 const { assemble } = require("arch-one");
 const { Keyed, button, div, render } = require("arch-one/dom");
 
-const increment = {
-    given: equals("intent/INCREMENT"),
-    then: emit => intent => Stream.from([
-        emit("fact/INCREMENTED"),
-    ]),
-};
-
 const handleIncrement = emit => model => evt => (
     emit("intent/INCREMENT")
 );
@@ -19,20 +12,16 @@ const handleSomething = emit => model => evt => (
     emit("intent/DO_SOMETHING")
 );
 
-const SimpleLabel = ({ label = `Some label` }) => [
+const SimpleLabel = plugins => ({ label = `Some label` }) => [
     [div, { onClick: handleSomething }, label],
 ];
 
-const Program = {
-    interpret: [
-        increment,
-    ],
-    materialize: model => [
-        [SimpleLabel, { label: "Custom label" }],
-        [Keyed(button, "some-key"), { onClick: handleIncrement },
-            `Clicked ${model.counter} times`,
-        ],
-    ],
+const Main = plugins => ({
+    interpret: {
+        "intent/INCREMENT": emit => intent => Stream.from([
+            emit("fact/INCREMENTED"),
+        ]),
+    },
     //process: spawnFact => spawnIntent => fact => Stream.from([
     //]),
     replay: (model = { counter: 0 }) => cond([
@@ -40,8 +29,19 @@ const Program = {
             ...model,
             counter: model.counter + 1,
         }],
-        [T, {...model}],
+        [T, model],
     ]),
+});
+
+const DomDriver = plugins => decoratee => {
+    const KeyedButton = Keyed(button, "some-key");
+    decoratee.materialize = model => [
+        [SimpleLabel, { label: "Custom label" }],
+        [KeyedButton, { onClick: handleIncrement },
+         `Clicked ${model.counter} times`,
+        ],
+    ];
+    return decoratee;
 };
 
-render(assemble(Program), document.body);
+render(assemble(Main, DomDriver), document.body);
