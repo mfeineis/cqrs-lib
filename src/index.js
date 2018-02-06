@@ -2,7 +2,7 @@ const { T, cond, equals, map, path, reduce } = require("ramda");
 
 const { assemble } = require("arch-one");
 const { SyncListAdapter, bindAdapter } = require("arch-one/process");
-const { Keyed, button, createRenderer, div, input, label } = require("arch-one/dom");
+const { Keyed, button, div, input, label, render } = require("arch-one/dom");
 
 const intents = {
     INCREMENT: "intent/INCREMENT",
@@ -60,6 +60,4 @@ const MainView = ({ intl }) => {
 
 const Main = assemble(MainView, MainReadSide, MainWriteSide);
 
-const render = createRenderer(/*plugins:*/{ intl: key => key });
-
-render(Main, document.body);
+render(Main, document.body, /*plugins:*/{ intl: key => key });
