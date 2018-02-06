@@ -60,4 +60,4 @@ const MainView = ({ intl }) => {
 
 const Main = assemble(MainView, MainReadSide, MainWriteSide);
 
-render(Main, document.body, /*plugins:*/{ intl: key => key });
+render(document.body, Main, /*props:*/null, /*plugins:*/{ intl: key => key });
