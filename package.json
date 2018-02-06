@@ -9,7 +9,6 @@
   "author": "Martin Feineis",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "most": "^1.7.3",
     "ramda": "^0.25.0"
   }
 }
