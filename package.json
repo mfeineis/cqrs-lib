@@ -10,5 +10,11 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-plugin-immutable": "^1.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-pure": "github:purely-functional/eslint-plugin-pure"
   }
 }

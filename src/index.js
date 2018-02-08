@@ -21,7 +21,7 @@ const handleSomething = emit => model => evt => (
     emit(intents.DO_SOMETHING, { some: "data" })
 );
 
-const MainReadSide = () => (model = { checked: false, counter: 0 }) => cond([
+const MainReadSide = (model = { checked: false, counter: 0 }) => cond([
     [equals(facts.INCREMENTED), {
         ...model,
         counter: model.counter + 1,
@@ -40,15 +40,15 @@ const MainWriteLogic = () => ({
 });
 const MainWriteSide = bindAdapter(SyncListAdapter, MainWriteLogic);
 
-const Checkbox = () => ({ checked = false }) => children => [
+const Checkbox = ({ checked = false }, children) => [
     [label, { onClick: handleSomething },
      [input, { checked }], ...children
     ],
 ];
 
-const MainView = ({ intl }) => {
+const MainView = (model, children) => {
     const KeyedButton = Keyed(button, "some-key");
-    return model => children => [
+    return [
         [Checkbox, `Custom label ${model.checked ? "(checked)" : ""}`
         ],
         [KeyedButton, { onClick: handleIncrement },

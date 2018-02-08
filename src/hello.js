@@ -1,6 +1,6 @@
 const { render } = require("arch-one/dom");
 
-const Hello = () => ({ who = "World" }) => () => [
+const Hello = ({ who = "World" }) => [
     `Hello ${who}`,
 ];
 

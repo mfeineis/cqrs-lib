@@ -1,0 +1,21 @@
+{
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "plugins": [
+        "immutable",
+        "pure"
+    ],
+    "rules": {
+        "immutable/no-let": 2,
+        "immutable/no-this": 2,
+        "immutable/no-mutation": 2,
+        "no-var": 2,
+        "prefer-const": 2,
+        "no-undef": 2,
+        "no-unused-vars": 2
+    }
+}
